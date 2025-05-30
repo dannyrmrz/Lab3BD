@@ -5,6 +5,9 @@ from .database import SessionLocal, engine
 from . import models, schemas
 from .models import Reserva
 from .schemas import ReservaCreate
+from . import crud
+
+models.Base.metadata.create_all(bind=engine)
 
 # Create the FastAPI app
 app = FastAPI()
@@ -17,9 +20,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Create the database tables
-models.Base.metadata.create_all(bind=engine)
 
 # Dependency to get the database session
 def get_db():
@@ -66,3 +66,7 @@ def delete_reserva(reserva_id: int, db: Session = Depends(get_db)):
     if reserva is None:
         raise HTTPException(status_code=404, detail="Reserva not found")
     return reserva
+
+@app.get("/")
+def root():
+    return {"message": "API funcionando"}

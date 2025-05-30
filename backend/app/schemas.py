@@ -20,6 +20,7 @@ class Reserva(ReservaBase):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
 class UsuarioBase(BaseModel):
     nombre: str

@@ -11,14 +11,21 @@ services:
       - ./backend:/app
     depends_on:
       - db
+    networks:
+      - mynetwork
 
   db:
     image: postgres:15
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
 
   frontend:
     build: ./frontend
@@ -29,6 +36,12 @@ services:
       - /app/node_modules
     stdin_open: true
     tty: true
+    networks:
+      - mynetwork
 
 volumes:
   pgdata:
+
+networks:
+  mynetwork:
+    driver: bridge
