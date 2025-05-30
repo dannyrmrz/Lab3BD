@@ -18,9 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create the database tables
-models.Base.metadata.create_all(bind=engine)
-
 # Dependency to get the database session
 def get_db():
     db = SessionLocal()
@@ -66,3 +63,7 @@ def delete_reserva(reserva_id: int, db: Session = Depends(get_db)):
     if reserva is None:
         raise HTTPException(status_code=404, detail="Reserva not found")
     return reserva
+
+@app.get("/")
+def root():
+    return {"message": "API funcionando"}
