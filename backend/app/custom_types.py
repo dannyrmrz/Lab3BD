@@ -1,4 +1,4 @@
-# filepath: c:\Users\BRUTE\Documents\GitHub\Lab3BD\backend\app\custom_types.py
+
 
 from enum import Enum
 
