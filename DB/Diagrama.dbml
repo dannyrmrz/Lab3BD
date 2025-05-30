@@ -1,0 +1,50 @@
+// dbml.dbml
+
+Enum TipoUsuario {
+  visitante
+  empleado
+}
+
+Enum EstadoReserva {
+  pendiente
+  confirmada
+  cancelada
+}
+
+Table Usuario {
+  id_usuario int [pk, increment]
+  nombre varchar(100) [not null]
+  email varchar(100) [not null, unique]
+  tipo_usuario TipoUsuario [not null]
+
+  Note: 'Tabla de usuarios del parque'
+}
+
+Table Atraccion {
+  id_atraccion int [pk, increment]
+  nombre varchar(100) [not null]
+  descripcion text
+  capacidad int [not null]
+  tiempo_promedio int [not null]
+
+  Note: 'Atracciones disponibles en el parque'
+}
+
+Table Cola {
+  id_cola int [pk, increment]
+  id_atraccion int [ref: > Atraccion.id_atraccion]
+  fecha date [not null]
+  max_personas int [not null]
+
+  Note: 'Colas abiertas para atracciones en fechas específicas'
+}
+
+Table Reserva {
+  id_reserva int [pk, increment]
+  id_usuario int [ref: > Usuario.id_usuario]
+  id_cola int [ref: > Cola.id_cola]
+  estado EstadoReserva [not null]
+  hora_reserva time [not null]
+
+  Note: 'Reservas hechas por usuarios en colas específicas'
+}
