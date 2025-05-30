@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Time, Enum as SQLEnum
 from sqlalchemy.orm import relationship
-from .custom_types import TipoUsuario, EstadoReserva
-from .database import Base
+from custom_types import TipoUsuario, EstadoReserva
+from database import Base
 
 class Usuario(Base):
     __tablename__ = 'Usuario'

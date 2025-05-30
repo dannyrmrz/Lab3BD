@@ -1,31 +1,15 @@
-version: '3.8'
-
 services:
   backend:
     build: ./backend
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://postgres:password@db:5432/postgres
+      DATABASE_URL: postgresql://postgres:nievedelimon@db:5432/Laboratorio3
     volumes:
-      - ./backend:/app
+      - ./backend/app:/app/app
     depends_on:
-      - db
-    networks:
-      - mynetwork
-
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - mynetwork
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
@@ -34,14 +18,24 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    environment:
+      VITE_API_BASE_URL: "http://backend:8000"
     stdin_open: true
     tty: true
-    networks:
-      - mynetwork
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: nievedelimon
+      POSTGRES_DB: Laboratorio3
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Laboratorio3"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
-
-networks:
-  mynetwork:
-    driver: bridge
